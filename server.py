@@ -50,16 +50,20 @@ def post_metrics():
         print("Server error", err)
         return "Internal Server Error", 500
     
-@app.route('/stream')
-def stream():
-    def event_stream():
+@app.route('/getData', methods=['GET'],strict_slashes=False)
+def getData():
+    try:
         global latest_sensor_data
-        while True:
-            if(latest_sensor_data is not None):
-                yield f"data: {latest_sensor_data}\n\n"
-                latest_sensor_data = None
-            time.sleep(1)
-    return Response(event_stream(), mimetype='text/event-stream')
+        if latest_sensor_data is not None:
+            data = latest_sensor_data
+            latest_sensor_data = None
+            return jsonify({"success": True, "data": data}), 200
+        else:
+            return jsonify({"success": False, "error": "No new data available"}), 404
+    except Exception as err:
+        print("Server error", err)
+        return jsonify({"success": False, "error": "Internal Server Error"}), 500
+    
     
     
 
