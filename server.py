@@ -50,16 +50,16 @@ def post_metrics():
         print("Server error", err)
         return "Internal Server Error", 500
     
-# @app.route('/stream')
-# def stream():
-#     def event_stream():
-#         global latest_sensor_data
-#         while True:
-#             if(latest_sensor_data is not None):
-#                 yield f"data: {latest_sensor_data}\n\n"
-#                 latest_sensor_data = None
-#             time.sleep(1)
-#     return Response(event_stream(), mimetype='text/event-stream')
+@app.route('/stream')
+def stream():
+    def event_stream():
+        global latest_sensor_data
+        while True:
+            if(latest_sensor_data is not None):
+                yield f"data: {latest_sensor_data}\n\n"
+                latest_sensor_data = None
+            time.sleep(1)
+    return Response(event_stream(), mimetype='text/event-stream')
     
     
 
