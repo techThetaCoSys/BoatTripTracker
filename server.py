@@ -35,6 +35,7 @@ def post_metrics():
     try:
         global latest_sensor_data 
         raw_body = request.get_data()
+        print(raw_body)
 
         if not raw_body.lat or not raw_body.lon:
             return "Incorrect data format", 400
@@ -51,7 +52,7 @@ def post_metrics():
             "device_time":raw_body.time,
             "time":iso_string,
         })
-        print(raw_body)
+        
         print("POST request : data received")
         return "Got a post response"
         
