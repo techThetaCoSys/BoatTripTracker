@@ -2,6 +2,7 @@ import os
 import time
 from datetime import datetime, timezone
 from flask import Flask, Response, request, jsonify,send_from_directory
+from flask_cors import CORS
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -10,6 +11,7 @@ app = Flask(
     static_folder=os.path.join(BASE_DIR, "dist"),
     static_url_path="/"
 )
+CORS(app)
 
 latest_sensor_data = None
 
