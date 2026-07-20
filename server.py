@@ -34,24 +34,30 @@ def serve_catch_all(path):
 def post_metrics():
     try:
         global latest_sensor_data 
-        raw_body = request.get_data()
+        raw_body = request.get_json()
         print(raw_body)
-
-        if not raw_body.lat or not raw_body.lon:
+        
+        if not raw_body :
+            return jsonify({"error": "Missing or invalid JSON"}), 400
+        
+        lat = raw_body.get('lat')
+        lon = raw_body.get('lon')
+        
+        if lat is None or lon is None:
             return "Incorrect data format", 400
 
         iso_string = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
-        data ="TimeStamp: "+ iso_string+"; Data: "+ raw_body
+        data ="TimeStamp: "+ iso_string+"; Data: "+ str(raw_body)
         
-        latest_sensor_data = jsonify({
-            "latitude":raw_body.lat,
-            "longitude" :raw_body.lon,
-            "altitude":raw_body.alt,
-            "phone":raw_body.phone,
-            "device_time":raw_body.time,
+        latest_sensor_data = {
+            "latitude":lat,
+            "longitude" :lon,
+            "altitude":raw_body.get('alt'),
+            "phone":raw_body.get('phone'),
+            "device_time":raw_body.get('time'),
             "time":iso_string,
-        })
+        }
         
         print("POST request : data received")
         return "Got a post response"
