@@ -64,6 +64,7 @@ def getData():
     try:
         global latest_sensor_data
         if latest_sensor_data is not None:
+            print(latest_sensor_data)
             data = latest_sensor_data
             latest_sensor_data = None
             return jsonify({"success": True, "data": data}), 200
